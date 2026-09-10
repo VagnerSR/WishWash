@@ -1,4 +1,3 @@
-import React from "react";
 import { MapPin, Search, Loader2 } from "lucide-react";
 import { THEME } from "../lib/theme";
 import { useI18n } from "../i18n/I18nContext";

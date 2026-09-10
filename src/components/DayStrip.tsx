@@ -1,4 +1,3 @@
-import React from "react";
 import { THEME, VERDICT_STYLE } from "../lib/theme";
 import { codeInfo } from "../lib/weatherCodes";
 import { washVerdict } from "../lib/washVerdict";

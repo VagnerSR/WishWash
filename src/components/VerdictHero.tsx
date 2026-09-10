@@ -1,4 +1,3 @@
-import React from "react";
 import { codeInfo } from "../lib/weatherCodes";
 import { VERDICT_STYLE } from "../lib/theme";
 import { formatTemp, tempUnitLabel } from "../lib/format";

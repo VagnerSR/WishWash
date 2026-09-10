@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { THEME } from "./lib/theme";
 import { planAheadVerdict } from "./lib/washVerdict";
