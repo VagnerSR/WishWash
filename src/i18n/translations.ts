@@ -1,8 +1,8 @@
-import type { VerdictKind } from "../types/weather";
+import type { WashReasonKind } from "../types/weather";
 
 export type Locale = "en" | "pt";
 
-interface VerdictText {
+interface ReasonText {
   label: string;
   detail: string;
 }
@@ -13,8 +13,15 @@ export interface Translations {
   searchPlaceholder: string;
   loading: string;
   errorSuffix: string;
-  heroEyebrow: string;
-  verdict: Record<VerdictKind, VerdictText>;
+  heroEyebrowPrefix: string;
+  washReasons: Record<WashReasonKind, ReasonText>;
+  rainWarningDetail: string;
+  dayAfterGoodNote: string;
+  dayAfterRainNote: string;
+  coveredAreaTip: string;
+  heroPastFivePmSuffix: string;
+  laundryConditionsLabel: string;
+  modelConsensusLabel: string;
   dayStripHeading: string;
   today: string;
   tomorrow: string;
@@ -36,8 +43,9 @@ export interface Translations {
   tempLegend: string;
   rainLegend: string;
   footer: string;
+  footerCredit: string;
   unitToggle: string;
-  confidence: { dry: string; wet: string; mixed: string };
+  confidence: { strong: string; moderate: string; disagreement: string };
 }
 
 const en: Translations = {
@@ -46,17 +54,40 @@ const en: Translations = {
   searchPlaceholder: "Search a city",
   loading: "Reading the sky…",
   errorSuffix: "Try searching for a city above.",
-  heroEyebrow: "Wash day check, for tomorrow",
-  verdict: {
-    greatDrying: { label: "Perfect for drying tomorrow", detail: "Sunny with little rain risk" },
-    goodTwoDays: {
-      label: "Good couple of days for laundry",
-      detail: "Tomorrow and the day after both look dry",
+  heroEyebrowPrefix: "Wash day check for",
+  washReasons: {
+    excellent: {
+      label: "Great day to wash",
+      detail: "Warm, dry, and breezy — great drying conditions tomorrow and the day after.",
     },
-    careful: { label: "Careful", detail: "Maybe not enough time to dry the clothes" },
-    keepInside: { label: "Keep it inside tomorrow", detail: "Rain looks likely tomorrow" },
-    okTomorrow: { label: "Should be fine tomorrow", detail: "Mostly dry, keep an eye on the sky" },
+    good: {
+      label: "Good day to wash",
+      detail: "Conditions look favorable for drying.",
+    },
+    goodRainWarning: {
+      label: "Good day — watch the rain",
+      detail: "There's a good dry window tomorrow, but {rainWarning}",
+    },
+    goodButSlowQuality: {
+      label: "Good day — drying may take longer",
+      detail: "Tomorrow is mostly dry, but cool and humid conditions may slow drying. The following day looks better.",
+    },
+    goodButSlowRain: {
+      label: "Good day — plan for two days",
+      detail: "Rain will likely limit drying tomorrow, but conditions improve the day after.",
+    },
+    wait: {
+      label: "Better to wait",
+      detail: "Rain and limited drying opportunity are expected over the next two days.",
+    },
   },
+  rainWarningDetail: "rain is possible between {start} and {end}.",
+  dayAfterGoodNote: "Good couple of days for laundry.",
+  dayAfterRainNote: "The next day: {rainWarning}",
+  coveredAreaTip: "If you're drying outdoors, consider a covered area or bring the clothes in before the rain.",
+  heroPastFivePmSuffix: ", already past 5 pm — here's the forecast for tomorrow",
+  laundryConditionsLabel: "Laundry conditions",
+  modelConsensusLabel: "Model consensus",
   dayStripHeading: "Next few days",
   today: "Today",
   tomorrow: "Tomorrow",
@@ -78,11 +109,12 @@ const en: Translations = {
   tempLegend: "Temp",
   rainLegend: "Rain chance %",
   footer: "Data from Open-Meteo. Updated on load.",
+  footerCredit: "Developed by",
   unitToggle: "°C / °F",
   confidence: {
-    dry: "Models agree: should stay dry",
-    wet: "Models agree: rain likely",
-    mixed: "Models disagree — worth a second look",
+    strong: "Strong",
+    moderate: "Moderate",
+    disagreement: "Disagreement",
   },
 };
 
@@ -92,20 +124,40 @@ const pt: Translations = {
   searchPlaceholder: "Buscar uma cidade",
   loading: "Consultando o céu…",
   errorSuffix: "Tente buscar uma cidade acima.",
-  heroEyebrow: "Previsão para amanhã",
-  verdict: {
-    greatDrying: { label: "Ótimo para secar amanhã", detail: "Sol, com pouco risco de chuva" },
-    goodTwoDays: {
-      label: "Bons dois dias para lavar roupa",
-      detail: "Amanhã e depois de amanhã devem ficar secos",
+  heroEyebrowPrefix: "Previsão para lavar roupa em",
+  washReasons: {
+    excellent: {
+      label: "Ótimo dia para lavar roupa",
+      detail: "Quente, seco e com vento — ótimas condições de secagem amanhã e depois de amanhã.",
     },
-    careful: { label: "Cuidado", detail: "Pode não dar tempo de secar a roupa" },
-    keepInside: { label: "Deixe a roupa dentro de casa amanhã", detail: "Chuva é provável amanhã" },
-    okTomorrow: {
-      label: "Deve ficar bom amanhã",
-      detail: "Tempo seco na maior parte, fique de olho no céu",
+    good: {
+      label: "Bom dia para lavar roupa",
+      detail: "As condições parecem favoráveis para secar roupa.",
+    },
+    goodRainWarning: {
+      label: "Bom dia — fique de olho na chuva",
+      detail: "Há uma boa janela seca amanhã, mas {rainWarning}",
+    },
+    goodButSlowQuality: {
+      label: "Bom dia — a secagem pode demorar mais",
+      detail: "Amanhã fica seco na maior parte, mas frio e úmido pode deixar a secagem mais lenta. O dia seguinte deve ser melhor.",
+    },
+    goodButSlowRain: {
+      label: "Bom dia — conte com dois dias",
+      detail: "A chuva deve limitar a secagem amanhã, mas as condições melhoram no dia seguinte.",
+    },
+    wait: {
+      label: "Melhor esperar",
+      detail: "Chuva e pouca oportunidade de secagem são esperadas nos próximos dois dias.",
     },
   },
+  rainWarningDetail: "há possibilidade de chuva entre {start} e {end}.",
+  dayAfterGoodNote: "Bons dois dias para lavar roupa.",
+  dayAfterRainNote: "No dia seguinte: {rainWarning}",
+  coveredAreaTip: "Se estiver secando ao ar livre, procure um local coberto ou recolha a roupa antes da chuva.",
+  heroPastFivePmSuffix: ", já passou das 17h — aqui está a previsão de amanhã",
+  laundryConditionsLabel: "Condições para lavar roupa",
+  modelConsensusLabel: "Consenso dos modelos",
   dayStripHeading: "Próximos dias",
   today: "Hoje",
   tomorrow: "Amanhã",
@@ -127,11 +179,12 @@ const pt: Translations = {
   tempLegend: "Temp",
   rainLegend: "Chance de chuva %",
   footer: "Dados do Open-Meteo. Atualizado ao carregar.",
+  footerCredit: "Desenvolvido por",
   unitToggle: "°C / °F",
   confidence: {
-    dry: "Modelos concordam: deve ficar seco",
-    wet: "Modelos concordam: chuva provável",
-    mixed: "Modelos divergem — vale conferir de novo",
+    strong: "Forte",
+    moderate: "Moderado",
+    disagreement: "Divergência",
   },
 };
 

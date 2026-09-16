@@ -16,6 +16,7 @@ export interface GeocodeResult {
 }
 
 export interface CurrentWeather {
+  time: string;
   temperature_2m: number;
   relative_humidity_2m: number;
   apparent_temperature: number;
@@ -28,7 +29,10 @@ export interface CurrentWeather {
 export interface HourlyWeather {
   time: string[];
   temperature_2m: number[];
+  relative_humidity_2m: number[];
+  wind_speed_10m: number[];
   precipitation_probability: number[];
+  precipitation: number[];
   cloud_cover: number[];
 }
 
@@ -74,3 +78,43 @@ export interface Verdict {
 }
 
 export type TempUnit = "c" | "f";
+
+export type WashLevel = "great" | "good" | "goodWithRainWarning" | "goodButSlow" | "wait";
+
+export type WashReasonKind =
+  | "excellent"
+  | "good"
+  | "goodRainWarning"
+  | "goodButSlowQuality"
+  | "goodButSlowRain"
+  | "wait";
+
+export interface RainWarning {
+  startHour: number;
+  endHour: number;
+}
+
+export type DayAfterNoteKind = "goodTwoDays" | "rainWarning";
+
+export interface WashRecommendation {
+  level: WashLevel;
+  reasonKind: WashReasonKind;
+
+  laundryScore: number;
+  rainSafety: number;
+  dryingOpportunity: number;
+  dryingQuality: number;
+
+  tomorrowOpportunity: number;
+  dayAfterOpportunity: number;
+  twoDayDryingOpportunity: number;
+
+  longestDryWindowTomorrow: number;
+  longestDryWindowDayAfter: number;
+
+  rainWarning: RainWarning | null;
+  dryingLikelyTakesTwoDays: boolean;
+
+  dayAfterNote: DayAfterNoteKind | null;
+  dayAfterRainWarning: RainWarning | null;
+}

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { THEME } from "./lib/theme";
-import { planAheadVerdict } from "./lib/washVerdict";
+import { buildWashRecommendation } from "./lib/washVerdict";
+import { extractDaySlice } from "./lib/hourlySlice";
 import { usePlace } from "./hooks/usePlace";
 import { useForecast } from "./hooks/useForecast";
 import { useGeocodeSearch } from "./hooks/useGeocodeSearch";
@@ -10,6 +11,7 @@ import { agreementFor } from "./lib/modelAgreement";
 import { dayName } from "./lib/format";
 import { I18nProvider, useI18n } from "./i18n/I18nContext";
 import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
 import { VerdictHero } from "./components/VerdictHero";
 import { DayStrip } from "./components/DayStrip";
 import { ConditionsGrid } from "./components/ConditionsGrid";
@@ -29,7 +31,7 @@ function AppContent() {
   const [unit, setUnit] = useState<TempUnit>("c");
   const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(1);
 
   const [place, setPlace] = usePlace();
   const { data, loading, error } = useForecast(place);
@@ -37,7 +39,7 @@ function AppContent() {
   const { readings } = useModelComparison(place);
 
   useEffect(() => {
-    setSelectedIndex(0);
+    setSelectedIndex(1);
   }, [place]);
 
   function onQueryChange(value: string) {
@@ -81,14 +83,23 @@ function AppContent() {
     }) ?? [];
 
   const today = days[0];
-  const tomorrow = days[1];
-  const dayAfter = days[2];
-  const verdict = tomorrow ? planAheadVerdict(tomorrow, dayAfter) : null;
-  const agreement = agreementFor(readings);
 
   const selectedDay = days[selectedIndex];
   const selectedLabel = selectedDay ? dayName(selectedIndex, selectedDay.date, t, localeTag) : "";
   const isToday = selectedIndex === 0;
+
+  const currentLocalHour = data ? Number(data.current.time.slice(11, 13)) : null;
+  const isPastFivePM = currentLocalHour !== null && currentLocalHour >= 17;
+  const showPastFivePmNotice = isToday && isPastFivePM;
+
+  const heroIndex = showPastFivePmNotice ? selectedIndex + 1 : selectedIndex;
+  const heroDay = days[heroIndex];
+  const heroDayAfter = days[heroIndex + 1];
+  const heroDaySlice = data && heroDay ? extractDaySlice(data.hourly, heroDay.date) : null;
+  const heroDayAfterSlice = data && heroDayAfter ? extractDaySlice(data.hourly, heroDayAfter.date) : null;
+  const recommendation = heroDaySlice ? buildWashRecommendation(heroDaySlice, heroDayAfterSlice) : null;
+
+  const agreement = agreementFor(readings);
 
   return (
     <div
@@ -124,9 +135,16 @@ function AppContent() {
           </div>
         )}
 
-        {!loading && !error && data && today && tomorrow && verdict && selectedDay && (
+        {!loading && !error && data && today && recommendation && selectedDay && heroDay && (
           <>
-            <VerdictHero verdict={verdict} tomorrow={tomorrow} unit={unit} agreement={agreement} />
+            <VerdictHero
+              recommendation={recommendation}
+              referenceDay={heroDay}
+              eyebrowDay={selectedDay}
+              showPastFivePmNotice={showPastFivePmNotice}
+              unit={unit}
+              agreement={agreement}
+            />
             <DayStrip days={days} unit={unit} selectedIndex={selectedIndex} onSelect={setSelectedIndex} />
             <ConditionsGrid
               day={selectedDay}
@@ -136,9 +154,7 @@ function AppContent() {
               unit={unit}
             />
             <HourlyChart hourly={data.hourly} dayIndex={selectedIndex} dayLabel={selectedLabel} unit={unit} />
-            <footer style={{ color: THEME.inkSoft }} className="text-xs mt-10 text-center">
-              {t.footer}
-            </footer>
+            <Footer />
           </>
         )}
       </div>

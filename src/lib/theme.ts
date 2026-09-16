@@ -1,4 +1,4 @@
-import type { VerdictLevel } from "../types/weather";
+import type { VerdictLevel, WashLevel } from "../types/weather";
 
 export const THEME = {
   paper: "#EEF1EA",
@@ -27,4 +27,12 @@ export const VERDICT_STYLE: Record<VerdictLevel, VerdictStyle> = {
   ok: { bg: "#D7D2BE", fg: THEME.ink, ring: THEME.inkSoft },
   careful: { bg: THEME.rust, fg: "#FBEEE6", ring: "#7A3512" },
   bad: { bg: THEME.storm, fg: "#F3F4F1", ring: THEME.stormDeep },
+};
+
+export const WASH_LEVEL_STYLE: Record<WashLevel, VerdictStyle> = {
+  great: { bg: THEME.marigold, fg: "#3D2A08", ring: THEME.marigoldDeep },
+  good: { bg: THEME.denim, fg: "#EAF3F7", ring: THEME.denimDeep },
+  goodWithRainWarning: { bg: THEME.marigold, fg: "#3D2A08", ring: THEME.marigoldDeep },
+  goodButSlow: { bg: "#D7D2BE", fg: THEME.ink, ring: THEME.inkSoft },
+  wait: { bg: THEME.storm, fg: "#F3F4F1", ring: THEME.stormDeep },
 };

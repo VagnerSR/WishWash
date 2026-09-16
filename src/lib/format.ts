@@ -46,3 +46,15 @@ export function fmtClock(iso: string, tag: string): string {
     minute: "2-digit",
   });
 }
+
+export function formatHourLabel(hour: number, tag: string): string {
+  return new Date(2000, 0, 1, hour).toLocaleTimeString(tag, { hour: "numeric" });
+}
+
+export function formatFullDate(dateStr: string, tag: string): string {
+  return new Date(dateStr + "T00:00:00").toLocaleDateString(tag, {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+}

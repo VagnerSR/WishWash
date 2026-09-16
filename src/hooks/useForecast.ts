@@ -21,7 +21,7 @@ export function useForecast(place: Place | null): ForecastState {
     const url =
       `https://api.open-meteo.com/v1/forecast?latitude=${place.lat}&longitude=${place.lon}` +
       `&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,cloud_cover` +
-      `&hourly=temperature_2m,precipitation_probability,cloud_cover` +
+      `&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation_probability,precipitation,cloud_cover` +
       `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,wind_speed_10m_max,sunshine_duration,daylight_duration,sunrise,sunset` +
       `&timezone=auto&forecast_days=6`;
 
