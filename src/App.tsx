@@ -31,7 +31,7 @@ function AppContent() {
   const [unit, setUnit] = useState<TempUnit>("c");
   const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const [place, setPlace] = usePlace();
   const { data, loading, error } = useForecast(place);
@@ -39,8 +39,10 @@ function AppContent() {
   const { readings } = useModelComparison(place);
 
   useEffect(() => {
-    setSelectedIndex(1);
-  }, [place]);
+    if (!data) return;
+    const hour = Number(data.current.time.slice(11, 13));
+    setSelectedIndex(hour >= 17 ? 1 : 0);
+  }, [data]);
 
   function onQueryChange(value: string) {
     setQuery(value);

@@ -14,6 +14,14 @@ export const THEME = {
   stormDeep: "#3F4652",
   rust: "#B4501E",
   card: "#F7F8F3",
+  sage: "#7C9690",
+  sageDeep: "#4F6B65",
+  gold: "#C7A542",
+  goldDeep: "#8C7420",
+  amber: "#D98B3D",
+  amberDeep: "#8C5A1F",
+  mist: "#8B8F87",
+  mistDeep: "#5E6259",
 } as const;
 
 interface VerdictStyle {
@@ -31,8 +39,9 @@ export const VERDICT_STYLE: Record<VerdictLevel, VerdictStyle> = {
 
 export const WASH_LEVEL_STYLE: Record<WashLevel, VerdictStyle> = {
   great: { bg: THEME.marigold, fg: "#3D2A08", ring: THEME.marigoldDeep },
-  good: { bg: THEME.denim, fg: "#EAF3F7", ring: THEME.denimDeep },
-  goodWithRainWarning: { bg: THEME.marigold, fg: "#3D2A08", ring: THEME.marigoldDeep },
-  goodButSlow: { bg: "#D7D2BE", fg: THEME.ink, ring: THEME.inkSoft },
-  wait: { bg: THEME.storm, fg: "#F3F4F1", ring: THEME.stormDeep },
+  goodWithRainWarning: { bg: THEME.amber, fg: "#3D2208", ring: THEME.amberDeep },
+  good: { bg: THEME.gold, fg: "#3D2A08", ring: THEME.goldDeep },
+  goodButSlow: { bg: THEME.sage, fg: THEME.ink, ring: THEME.sageDeep },
+  borderline: { bg: THEME.mist, fg: THEME.ink, ring: THEME.mistDeep },
+  bad: { bg: THEME.storm, fg: "#F3F4F1", ring: THEME.stormDeep },
 };

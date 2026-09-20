@@ -58,7 +58,7 @@ const en: Translations = {
   washReasons: {
     excellent: {
       label: "Great day to wash",
-      detail: "Warm, dry, and breezy — great drying conditions tomorrow and the day after.",
+      detail: "Warm, dry, and breezy — great drying conditions, continuing into the day after.",
     },
     good: {
       label: "Good day to wash",
@@ -66,18 +66,26 @@ const en: Translations = {
     },
     goodRainWarning: {
       label: "Good day — watch the rain",
-      detail: "There's a good dry window tomorrow, but {rainWarning}",
+      detail: "There's a good dry window, but {rainWarning}",
     },
     goodButSlowQuality: {
       label: "Good day — drying may take longer",
-      detail: "Tomorrow is mostly dry, but cool and humid conditions may slow drying. The following day looks better.",
+      detail: "It's mostly dry, but cool and humid conditions may slow drying. The following day looks better.",
     },
     goodButSlowRain: {
       label: "Good day — plan for two days",
-      detail: "Rain will likely limit drying tomorrow, but conditions improve the day after.",
+      detail: "Rain will likely limit drying, but conditions improve the day after.",
     },
-    wait: {
-      label: "Better to wait",
+    goodButSlowBoth: {
+      label: "Good day — allow extra time",
+      detail: "Neither day is ideal on its own, so the wash may take longer than usual to fully dry.",
+    },
+    borderline: {
+      label: "Your call — conditions are mixed",
+      detail: "The next two days are close enough to call that it's genuinely up to you.",
+    },
+    bad: {
+      label: "Bad day to wash",
       detail: "Rain and limited drying opportunity are expected over the next two days.",
     },
   },
@@ -128,7 +136,7 @@ const pt: Translations = {
   washReasons: {
     excellent: {
       label: "Ótimo dia para lavar roupa",
-      detail: "Quente, seco e com vento — ótimas condições de secagem amanhã e depois de amanhã.",
+      detail: "Quente, seco e com vento — ótimas condições de secagem, continuando no dia seguinte.",
     },
     good: {
       label: "Bom dia para lavar roupa",
@@ -136,18 +144,26 @@ const pt: Translations = {
     },
     goodRainWarning: {
       label: "Bom dia — fique de olho na chuva",
-      detail: "Há uma boa janela seca amanhã, mas {rainWarning}",
+      detail: "Há uma boa janela seca, mas {rainWarning}",
     },
     goodButSlowQuality: {
       label: "Bom dia — a secagem pode demorar mais",
-      detail: "Amanhã fica seco na maior parte, mas frio e úmido pode deixar a secagem mais lenta. O dia seguinte deve ser melhor.",
+      detail: "Fica seco na maior parte, mas frio e úmido pode deixar a secagem mais lenta. O dia seguinte deve ser melhor.",
     },
     goodButSlowRain: {
       label: "Bom dia — conte com dois dias",
-      detail: "A chuva deve limitar a secagem amanhã, mas as condições melhoram no dia seguinte.",
+      detail: "A chuva deve limitar a secagem, mas as condições melhoram no dia seguinte.",
     },
-    wait: {
-      label: "Melhor esperar",
+    goodButSlowBoth: {
+      label: "Bom dia — reserve mais tempo",
+      detail: "Nenhum dos dois dias é ideal sozinho, então a roupa pode demorar mais que o normal para secar.",
+    },
+    borderline: {
+      label: "Você decide — condições incertas",
+      detail: "Os próximos dois dias estão no limite, então a decisão é sua.",
+    },
+    bad: {
+      label: "Dia ruim para lavar roupa",
       detail: "Chuva e pouca oportunidade de secagem são esperadas nos próximos dois dias.",
     },
   },

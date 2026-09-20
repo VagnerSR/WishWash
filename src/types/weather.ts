@@ -79,7 +79,7 @@ export interface Verdict {
 
 export type TempUnit = "c" | "f";
 
-export type WashLevel = "great" | "good" | "goodWithRainWarning" | "goodButSlow" | "wait";
+export type WashLevel = "great" | "good" | "goodWithRainWarning" | "goodButSlow" | "borderline" | "bad";
 
 export type WashReasonKind =
   | "excellent"
@@ -87,7 +87,9 @@ export type WashReasonKind =
   | "goodRainWarning"
   | "goodButSlowQuality"
   | "goodButSlowRain"
-  | "wait";
+  | "goodButSlowBoth"
+  | "borderline"
+  | "bad";
 
 export interface RainWarning {
   startHour: number;

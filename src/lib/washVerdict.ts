@@ -32,9 +32,15 @@ const OPPORTUNITY_WINDOW_NORMALIZER = 12;
 
 const MIN_MEANINGFUL_WINDOW_HOURS = 7;
 
-const DRYING_LIKELY_TWO_DAYS_THRESHOLD = 55;
+const DRYING_LIKELY_TWO_DAYS_THRESHOLD = 62;
+const GOOD_BUT_SLOW_MIN_OPPORTUNITY = 60;
+const LONG_RAIN_WARNING_HOURS = 6;
+const REASON_IMPROVEMENT_MARGIN = 10;
 
-const WAIT_THRESHOLD = 35;
+const BAD_THRESHOLD = 20;
+const BORDERLINE_THRESHOLD = 35;
+const CONVINCING_DAY_THRESHOLD = 60;
+const CONVINCING_GATE_BAD_CUTOFF = 70;
 const GREAT_THRESHOLD = 80;
 
 const GREAT_QUALITY_MIN = 55;
@@ -155,8 +161,11 @@ interface LevelInput {
   laundryScore: number;
   dryingQuality: number;
   twoDayOpportunity: number;
+  tomorrowOpportunity: number;
+  dayAfterOpportunity: number;
   dryingLikelyTakesTwoDays: boolean;
   hasRainWarning: boolean;
+  rainWarningHours: number;
   longestDryWindowTomorrow: number;
   longestDryWindowDayAfter: number;
 }
@@ -166,8 +175,11 @@ function decideLevel(input: LevelInput): { level: WashRecommendation["level"]; r
     laundryScore,
     dryingQuality,
     twoDayOpportunity,
+    tomorrowOpportunity,
+    dayAfterOpportunity,
     dryingLikelyTakesTwoDays,
     hasRainWarning,
+    rainWarningHours,
     longestDryWindowTomorrow,
     longestDryWindowDayAfter,
   } = input;
@@ -175,13 +187,41 @@ function decideLevel(input: LevelInput): { level: WashRecommendation["level"]; r
   const noMeaningfulWindowEitherDay =
     longestDryWindowTomorrow < MIN_MEANINGFUL_WINDOW_HOURS && longestDryWindowDayAfter < MIN_MEANINGFUL_WINDOW_HOURS;
 
-  if (twoDayOpportunity < WAIT_THRESHOLD || noMeaningfulWindowEitherDay) {
-    return { level: "wait", reasonKind: "wait" };
+  if (noMeaningfulWindowEitherDay) {
+    return twoDayOpportunity < CONVINCING_GATE_BAD_CUTOFF
+      ? { level: "bad", reasonKind: "bad" }
+      : { level: "borderline", reasonKind: "borderline" };
   }
 
-  if (dryingLikelyTakesTwoDays) {
-    if (twoDayOpportunity < 55) return { level: "wait", reasonKind: "wait" };
-    const reasonKind: WashReasonKind = longestDryWindowTomorrow < 10 ? "goodButSlowRain" : "goodButSlowQuality";
+  if (twoDayOpportunity < BAD_THRESHOLD) {
+    return { level: "bad", reasonKind: "bad" };
+  }
+
+  if (twoDayOpportunity < BORDERLINE_THRESHOLD) {
+    return { level: "borderline", reasonKind: "borderline" };
+  }
+
+  const hasConvincingDay = Math.max(tomorrowOpportunity, dayAfterOpportunity) >= CONVINCING_DAY_THRESHOLD;
+
+  if (!hasConvincingDay) {
+    return twoDayOpportunity < CONVINCING_GATE_BAD_CUTOFF
+      ? { level: "bad", reasonKind: "bad" }
+      : { level: "borderline", reasonKind: "borderline" };
+  }
+
+  const rainDominatesDay = rainWarningHours >= LONG_RAIN_WARNING_HOURS;
+
+  if (dryingLikelyTakesTwoDays || rainDominatesDay) {
+    if (twoDayOpportunity < GOOD_BUT_SLOW_MIN_OPPORTUNITY) {
+      return { level: "borderline", reasonKind: "borderline" };
+    }
+    const dayAfterMeaningfullyBetter = dayAfterOpportunity >= tomorrowOpportunity + REASON_IMPROVEMENT_MARGIN;
+    let reasonKind: WashReasonKind;
+    if (!dayAfterMeaningfullyBetter) {
+      reasonKind = "goodButSlowBoth";
+    } else {
+      reasonKind = rainDominatesDay || longestDryWindowTomorrow < 10 ? "goodButSlowRain" : "goodButSlowQuality";
+    }
     return { level: "goodButSlow", reasonKind };
   }
 
@@ -225,13 +265,17 @@ export function buildWashRecommendation(tomorrow: DayHourlySlice, dayAfter: DayH
 
   const dryingLikelyTakesTwoDays = tomorrowOpportunity < DRYING_LIKELY_TWO_DAYS_THRESHOLD;
   const rainWarning = findRainWarningWindow(day1.risks, tomorrow.hours);
+  const rainWarningHours = rainWarning ? rainWarning.endHour - rainWarning.startHour + 1 : 0;
 
   const { level, reasonKind } = decideLevel({
     laundryScore,
     dryingQuality,
     twoDayOpportunity,
+    tomorrowOpportunity,
+    dayAfterOpportunity,
     dryingLikelyTakesTwoDays,
     hasRainWarning: rainWarning !== null,
+    rainWarningHours,
     longestDryWindowTomorrow: day1.longestWindowHours,
     longestDryWindowDayAfter,
   });
@@ -279,6 +323,7 @@ export function buildWashRecommendation(tomorrow: DayHourlySlice, dayAfter: DayH
     longestDryWindowDayAfter: result.longestDryWindowDayAfter,
     dryingLikelyTakesTwoDays: result.dryingLikelyTakesTwoDays,
     rainWarning: result.rainWarning,
+    rainWarningHours,
     dayAfterNote: result.dayAfterNote,
     dayAfterRainWarning: result.dayAfterRainWarning,
     laundryScore: result.laundryScore,
