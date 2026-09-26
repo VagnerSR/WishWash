@@ -1,8 +1,8 @@
+import { Cloud, CloudRain, Moon, Sunrise, Sunset } from "lucide-react";
 import { THEME } from "../lib/theme";
 import { fmtClock } from "../lib/format";
 import { useI18n } from "../i18n/I18nContext";
-import { WeatherIcon } from "./WeatherIcon";
-import { moonPhaseIconSlug } from "../lib/weatherIconSlug";
+import { MoonPhaseIcon } from "./MoonPhaseIcon";
 import type { MoonInfo } from "../types/weather";
 
 interface MoonCardProps {
@@ -18,7 +18,7 @@ export function MoonCard({ moon }: MoonCardProps) {
         style={{ background: THEME.stormDeep, color: "#F3F4F1" }}
         className="rounded-3xl px-6 md:px-10 py-7 md:py-9 h-full flex flex-col items-center justify-center text-center gap-2"
       >
-        <WeatherIcon slug="not-available" size={56} />
+        <Moon size={40} strokeWidth={1.4} opacity={0.7} />
         <p className="text-sm opacity-80">{t.moon.unknown}</p>
       </div>
     );
@@ -57,7 +57,7 @@ export function MoonCard({ moon }: MoonCardProps) {
       )}
 
       <div className="relative flex flex-row md:flex-col items-center gap-4 md:gap-2 md:text-center">
-        <WeatherIcon slug={moonPhaseIconSlug(moon.phaseName)} size={96} />
+        <MoonPhaseIcon phase={moon.phaseFraction} size={72} />
         <div className="flex flex-col md:items-center">
           <p className="text-[11px] uppercase tracking-wide opacity-60">{t.moon.cardHeading}</p>
           <h2 style={{ fontFamily: "'Fraunces', serif", fontWeight: 600 }} className="text-xl leading-tight">
@@ -74,13 +74,13 @@ export function MoonCard({ moon }: MoonCardProps) {
 
         {showMoonrise && (
           <span className="flex items-center gap-2">
-            <WeatherIcon slug="moonrise" size={20} />
+            <Sunrise size={15} className="shrink-0" />
             {t.moon.moonrise} {fmtClock(moon.visibility.moonriseLocalIso as string, localeTag)}
           </span>
         )}
         {showMoonset && (
           <span className="flex items-center gap-2">
-            <WeatherIcon slug="moonset" size={20} />
+            <Sunset size={15} className="shrink-0" />
             {t.moon.moonset} {fmtClock(moon.visibility.moonsetLocalIso as string, localeTag)}
           </span>
         )}
@@ -89,11 +89,11 @@ export function MoonCard({ moon }: MoonCardProps) {
         {moon.night && (
           <>
             <span className="flex items-center gap-2">
-              <WeatherIcon slug="overcast-night" size={20} />
+              <Cloud size={15} className="shrink-0" />
               {t.moon.sky}: {t.moon.skyLevels[moon.night.skyLevel]}
             </span>
             <span className="flex items-center gap-2">
-              <WeatherIcon slug="rain" size={20} />
+              <CloudRain size={15} className="shrink-0" />
               {t.moon.rain}: {t.moon.rainLevels[moon.night.rainLevel]}
             </span>
           </>

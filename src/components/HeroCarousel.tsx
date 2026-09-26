@@ -101,7 +101,7 @@ export function HeroCarousel({ slides }: HeroCarouselProps) {
           aria-label="Next card"
           onClick={() => setIndex((i) => clampIndex(i + 1))}
           style={{ background: THEME.card, color: THEME.ink, borderColor: THEME.line }}
-          className="flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-9 h-9 rounded-full border opacity-60 hover:opacity-100 transition-opacity shadow-sm"
+          className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-9 h-9 rounded-full border opacity-60 hover:opacity-100 transition-opacity shadow-sm"
         >
           <ChevronRight size={18} />
         </button>

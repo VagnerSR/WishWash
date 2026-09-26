@@ -1,6 +1,5 @@
 import { THEME, SKY_CONDITION_STYLE } from "../lib/theme";
 import { codeInfo } from "../lib/weatherCodes";
-import { WeatherIcon } from "./WeatherIcon";
 import { classifySkyCondition } from "../lib/skyCondition";
 import { dayName, formatTemp } from "../lib/format";
 import { useI18n } from "../i18n/I18nContext";
@@ -30,7 +29,7 @@ export function DayStrip({ days, unit, selectedIndex, onSelect }: DayStripProps)
           {days.map((d, i) => {
             const sky = classifySkyCondition(d);
             const vs = SKY_CONDITION_STYLE[sky];
-            const { icon } = codeInfo(d.weatherCode);
+            const { Icon } = codeInfo(d.weatherCode);
             const label = dayName(i, d.date, t, localeTag);
             const badge = t.skyConditions[sky];
             const selected = i === selectedIndex;
@@ -55,10 +54,10 @@ export function DayStrip({ days, unit, selectedIndex, onSelect }: DayStripProps)
                   // Fixed height so every tile matches regardless of whether
                   // its badge text wraps to one or two lines (e.g. "Cloudy"
                   // vs "Showers possible").
-                  className="w-full h-[180px] rounded-2xl border px-2 py-4 flex flex-col items-center justify-between gap-1"
+                  className="w-full h-[180px] rounded-2xl border px-2 py-4 flex flex-col items-center gap-2"
                 >
                   <span className="text-xs font-medium">{label}</span>
-                  <WeatherIcon slug={icon} size={52} />
+                  <Icon size={26} strokeWidth={1.5} color={THEME.denim} />
                   <span style={{ fontFamily: "'IBM Plex Mono', monospace" }} className="text-sm">
                     {formatTemp(d.tMax, unit)}&deg; / {formatTemp(d.tMin, unit)}&deg;
                   </span>
