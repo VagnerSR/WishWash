@@ -1,6 +1,7 @@
-import { THEME, VERDICT_STYLE } from "../lib/theme";
+import { THEME, SKY_CONDITION_STYLE } from "../lib/theme";
 import { codeInfo } from "../lib/weatherCodes";
-import { washVerdict } from "../lib/washVerdict";
+import { WeatherIcon } from "./WeatherIcon";
+import { classifySkyCondition } from "../lib/skyCondition";
 import { dayName, formatTemp } from "../lib/format";
 import { useI18n } from "../i18n/I18nContext";
 import type { DayForecast, TempUnit } from "../types/weather";
@@ -27,12 +28,11 @@ export function DayStrip({ days, unit, selectedIndex, onSelect }: DayStripProps)
         />
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 md:gap-4 relative">
           {days.map((d, i) => {
-            const v = washVerdict(d);
-            const vs = VERDICT_STYLE[v.level];
-            const { Icon } = codeInfo(d.weatherCode);
+            const sky = classifySkyCondition(d);
+            const vs = SKY_CONDITION_STYLE[sky];
+            const { icon } = codeInfo(d.weatherCode);
             const label = dayName(i, d.date, t, localeTag);
-            const badge =
-              v.level === "great" ? t.dayBadge.great : v.level === "ok" ? t.dayBadge.ok : t.dayBadge.bad;
+            const badge = t.skyConditions[sky];
             const selected = i === selectedIndex;
             return (
               <button
@@ -52,16 +52,19 @@ export function DayStrip({ days, unit, selectedIndex, onSelect }: DayStripProps)
                     borderColor: selected ? THEME.denim : THEME.line,
                     borderWidth: selected ? 2 : 1,
                   }}
-                  className="w-full rounded-2xl border px-2 py-4 flex flex-col items-center gap-2"
+                  // Fixed height so every tile matches regardless of whether
+                  // its badge text wraps to one or two lines (e.g. "Cloudy"
+                  // vs "Showers possible").
+                  className="w-full h-[180px] rounded-2xl border px-2 py-4 flex flex-col items-center justify-between gap-1"
                 >
                   <span className="text-xs font-medium">{label}</span>
-                  <Icon size={26} strokeWidth={1.5} color={THEME.denim} />
+                  <WeatherIcon slug={icon} size={52} />
                   <span style={{ fontFamily: "'IBM Plex Mono', monospace" }} className="text-sm">
                     {formatTemp(d.tMax, unit)}&deg; / {formatTemp(d.tMin, unit)}&deg;
                   </span>
                   <span
                     style={{ background: vs.bg, color: vs.fg }}
-                    className="text-[11px] px-2 py-1 rounded-full mt-1 leading-none"
+                    className="w-full text-[10px] text-center px-1.5 py-1 rounded-lg mt-1 leading-tight"
                   >
                     {badge}
                   </span>

@@ -1,15 +1,7 @@
-import {
-  Thermometer,
-  Droplets,
-  Wind,
-  Cloud,
-  CloudRain,
-  Gauge,
-  Sunrise,
-  Sunset,
-} from "lucide-react";
+import { Droplets, Gauge } from "lucide-react";
 import { THEME } from "../lib/theme";
 import { StatCard } from "./StatCard";
+import { WeatherIcon } from "./WeatherIcon";
 import { formatTemp, formatWind, tempUnitLabel, windUnitLabel, fmtClock } from "../lib/format";
 import { useI18n } from "../i18n/I18nContext";
 import type { CurrentWeather, DayForecast, TempUnit } from "../types/weather";
@@ -35,22 +27,22 @@ export function ConditionsGrid({ day, current, isToday, dayLabel, unit }: Condit
         {isToday && current ? (
           <>
             <StatCard
-              icon={<Thermometer size={16} color={THEME.denim} />}
+              icon={<WeatherIcon slug="thermometer" size={34} />}
               label={t.feelsLike}
               value={`${formatTemp(current.apparent_temperature, unit)}${tempUnitLabel(unit)}`}
             />
             <StatCard
-              icon={<Droplets size={16} color={THEME.denim} />}
+              icon={<Droplets size={26} color={THEME.denim} />}
               label={t.humidity}
               value={`${Math.round(current.relative_humidity_2m)}%`}
             />
             <StatCard
-              icon={<Wind size={16} color={THEME.denim} />}
+              icon={<WeatherIcon slug="wind" size={34} />}
               label={t.wind}
               value={`${formatWind(current.wind_speed_10m, unit)} ${windUnitLabel(unit)}`}
             />
             <StatCard
-              icon={<Cloud size={16} color={THEME.denim} />}
+              icon={<WeatherIcon slug="overcast-day" size={34} />}
               label={t.cloudCover}
               value={`${Math.round(current.cloud_cover)}%`}
             />
@@ -58,39 +50,39 @@ export function ConditionsGrid({ day, current, isToday, dayLabel, unit }: Condit
         ) : (
           <>
             <StatCard
-              icon={<Thermometer size={16} color={THEME.denim} />}
+              icon={<WeatherIcon slug="thermometer" size={34} />}
               label={t.high}
               value={`${formatTemp(day.tMax, unit)}${tempUnitLabel(unit)}`}
             />
             <StatCard
-              icon={<Thermometer size={16} color={THEME.denim} />}
+              icon={<WeatherIcon slug="thermometer" size={34} />}
               label={t.low}
               value={`${formatTemp(day.tMin, unit)}${tempUnitLabel(unit)}`}
             />
             <StatCard
-              icon={<Wind size={16} color={THEME.denim} />}
+              icon={<WeatherIcon slug="wind" size={34} />}
               label={t.wind}
               value={`${formatWind(day.windMax, unit)} ${windUnitLabel(unit)}`}
             />
           </>
         )}
         <StatCard
-          icon={<CloudRain size={16} color={THEME.denim} />}
+          icon={<WeatherIcon slug="rain" size={34} />}
           label={t.rainChance}
           value={`${Math.round(day.precipMax)}%`}
         />
         <StatCard
-          icon={<Gauge size={16} color={THEME.denim} />}
+          icon={<Gauge size={26} color={THEME.denim} />}
           label={t.uvIndex}
           value={`${Math.round(day.uvMax)}`}
         />
         <StatCard
-          icon={<Sunrise size={16} color={THEME.denim} />}
+          icon={<WeatherIcon slug="sunrise" size={34} />}
           label={t.sunrise}
           value={fmtClock(day.sunrise, localeTag)}
         />
         <StatCard
-          icon={<Sunset size={16} color={THEME.denim} />}
+          icon={<WeatherIcon slug="sunset" size={34} />}
           label={t.sunset}
           value={fmtClock(day.sunset, localeTag)}
         />

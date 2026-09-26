@@ -13,9 +13,12 @@ import { I18nProvider, useI18n } from "./i18n/I18nContext";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { VerdictHero } from "./components/VerdictHero";
+import { HeroCarousel } from "./components/HeroCarousel";
+import { MoonCard } from "./components/MoonCard";
 import { DayStrip } from "./components/DayStrip";
 import { ConditionsGrid } from "./components/ConditionsGrid";
 import { HourlyChart } from "./components/HourlyChart";
+import { buildMoonInfo } from "./lib/moonPhase";
 import type { DayForecast, GeocodeResult, TempUnit } from "./types/weather";
 
 export default function App() {
@@ -102,6 +105,7 @@ function AppContent() {
   const recommendation = heroDaySlice ? buildWashRecommendation(heroDaySlice, heroDayAfterSlice) : null;
 
   const agreement = agreementFor(readings);
+  const moon = buildMoonInfo(place, data);
 
   return (
     <div
@@ -139,13 +143,18 @@ function AppContent() {
 
         {!loading && !error && data && today && recommendation && selectedDay && heroDay && (
           <>
-            <VerdictHero
-              recommendation={recommendation}
-              referenceDay={heroDay}
-              eyebrowDay={selectedDay}
-              showPastFivePmNotice={showPastFivePmNotice}
-              unit={unit}
-              agreement={agreement}
+            <HeroCarousel
+              slides={[
+                <VerdictHero
+                  recommendation={recommendation}
+                  referenceDay={heroDay}
+                  eyebrowDay={selectedDay}
+                  showPastFivePmNotice={showPastFivePmNotice}
+                  unit={unit}
+                  agreement={agreement}
+                />,
+                <MoonCard moon={moon} />,
+              ]}
             />
             <DayStrip days={days} unit={unit} selectedIndex={selectedIndex} onSelect={setSelectedIndex} />
             <ConditionsGrid

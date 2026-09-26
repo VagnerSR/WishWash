@@ -1,4 +1,4 @@
-import type { VerdictLevel, WashLevel } from "../types/weather";
+import type { SkyCondition, VerdictLevel, WashLevel } from "../types/weather";
 
 export const THEME = {
   paper: "#EEF1EA",
@@ -35,6 +35,16 @@ export const VERDICT_STYLE: Record<VerdictLevel, VerdictStyle> = {
   ok: { bg: "#D7D2BE", fg: THEME.ink, ring: THEME.inkSoft },
   careful: { bg: THEME.rust, fg: "#FBEEE6", ring: "#7A3512" },
   bad: { bg: THEME.storm, fg: "#F3F4F1", ring: THEME.stormDeep },
+};
+
+export const SKY_CONDITION_STYLE: Record<SkyCondition, VerdictStyle> = {
+  sunny: { bg: THEME.marigold, fg: "#3D2A08", ring: THEME.marigoldDeep },
+  mostlyClear: { bg: THEME.gold, fg: "#3D2A08", ring: THEME.goldDeep },
+  partlyCloudy: { bg: THEME.mist, fg: "#F3F4F1", ring: THEME.mistDeep },
+  cloudy: { bg: THEME.storm, fg: "#F3F4F1", ring: THEME.stormDeep },
+  showersPossible: { bg: THEME.denim, fg: "#F3F4F1", ring: THEME.denimDeep },
+  rainLikely: { bg: THEME.denimDeep, fg: "#F3F4F1", ring: "#15384A" },
+  thunderstorms: { bg: THEME.ink, fg: "#F3F4F1", ring: "#0E120D" },
 };
 
 export const WASH_LEVEL_STYLE: Record<WashLevel, VerdictStyle> = {

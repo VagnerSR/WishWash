@@ -1,5 +1,6 @@
 import { Umbrella } from "lucide-react";
 import { codeInfo } from "../lib/weatherCodes";
+import { WeatherIcon } from "./WeatherIcon";
 import { WASH_LEVEL_STYLE } from "../lib/theme";
 import { formatTemp, tempUnitLabel, formatHourLabel, formatFullDate } from "../lib/format";
 import { useI18n } from "../i18n/I18nContext";
@@ -26,7 +27,7 @@ export function VerdictHero({
   const { t, localeTag } = useI18n();
   const style = WASH_LEVEL_STYLE[recommendation.level];
   const reason = t.washReasons[recommendation.reasonKind];
-  const { Icon } = codeInfo(referenceDay.weatherCode);
+  const { icon } = codeInfo(referenceDay.weatherCode);
 
   let detail = reason.detail;
   if (recommendation.rainWarning) {
@@ -83,7 +84,7 @@ export function VerdictHero({
           )}
         </div>
         <div className="flex items-center gap-4">
-          <Icon size={56} strokeWidth={1.4} />
+          <WeatherIcon slug={icon} size={112} />
           <div style={{ fontFamily: "'IBM Plex Mono', monospace" }} className="text-4xl md:text-5xl">
             {formatTemp(referenceDay.tMax, unit)}
             <span className="text-xl align-top">{tempUnitLabel(unit)}</span>

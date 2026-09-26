@@ -1,4 +1,4 @@
-import type { WashReasonKind } from "../types/weather";
+import type { MoonPhaseName, NightRainLevel, NightSkyLevel, SkyCondition, WashReasonKind } from "../types/weather";
 
 export type Locale = "en" | "pt";
 
@@ -26,6 +26,7 @@ export interface Translations {
   today: string;
   tomorrow: string;
   dayBadge: { great: string; ok: string; bad: string };
+  skyConditions: Record<SkyCondition, string>;
   conditionsHeadingToday: string;
   conditionsHeadingFor: string;
   high: string;
@@ -46,6 +47,23 @@ export interface Translations {
   footerCredit: string;
   unitToggle: string;
   confidence: { strong: string; moderate: string; disagreement: string };
+  moon: {
+    cardHeading: string;
+    tonightHeading: string;
+    illuminated: string;
+    moonrise: string;
+    moonset: string;
+    sky: string;
+    rain: string;
+    visibleLaterTonight: string;
+    belowHorizonTonight: string;
+    alwaysUpTonight: string;
+    alwaysDownTonight: string;
+    unknown: string;
+    phaseNames: Record<MoonPhaseName, string>;
+    rainLevels: Record<NightRainLevel, string>;
+    skyLevels: Record<NightSkyLevel, string>;
+  };
 }
 
 const en: Translations = {
@@ -100,6 +118,15 @@ const en: Translations = {
   today: "Today",
   tomorrow: "Tomorrow",
   dayBadge: { great: "Dry", ok: "Maybe", bad: "Rain" },
+  skyConditions: {
+    sunny: "Sunny",
+    mostlyClear: "Mostly clear",
+    partlyCloudy: "Partly cloudy",
+    cloudy: "Cloudy",
+    showersPossible: "Showers possible",
+    rainLikely: "Rain likely",
+    thunderstorms: "Thunderstorms",
+  },
   conditionsHeadingToday: "Current conditions",
   conditionsHeadingFor: "Conditions for",
   high: "High",
@@ -123,6 +150,42 @@ const en: Translations = {
     strong: "Strong",
     moderate: "Moderate",
     disagreement: "Disagreement",
+  },
+  moon: {
+    cardHeading: "Moon",
+    tonightHeading: "Tonight",
+    illuminated: "illuminated",
+    moonrise: "Moonrise",
+    moonset: "Moonset",
+    sky: "Sky",
+    rain: "Rain",
+    visibleLaterTonight: "Visible later tonight",
+    belowHorizonTonight: "Moon below the horizon tonight",
+    alwaysUpTonight: "Visible all night",
+    alwaysDownTonight: "Not visible tonight",
+    unknown: "Moonrise and moonset aren't available right now",
+    phaseNames: {
+      newMoon: "New Moon",
+      waxingCrescent: "Waxing Crescent",
+      firstQuarter: "First Quarter",
+      waxingGibbous: "Waxing Gibbous",
+      fullMoon: "Full Moon",
+      waningGibbous: "Waning Gibbous",
+      lastQuarter: "Last Quarter",
+      waningCrescent: "Waning Crescent",
+    },
+    rainLevels: {
+      none: "No rain expected",
+      low: "Low chance of rain",
+      possible: "Rain possible",
+      expected: "Rain expected",
+    },
+    skyLevels: {
+      clear: "Clear",
+      mostlyClear: "Mostly clear",
+      partlyCloudy: "Partly cloudy",
+      cloudy: "Cloudy",
+    },
   },
 };
 
@@ -178,6 +241,15 @@ const pt: Translations = {
   today: "Hoje",
   tomorrow: "Amanhã",
   dayBadge: { great: "Seco", ok: "Talvez", bad: "Chuva" },
+  skyConditions: {
+    sunny: "Ensolarado",
+    mostlyClear: "Predomínio de sol",
+    partlyCloudy: "Parcialmente nublado",
+    cloudy: "Nublado",
+    showersPossible: "Possibilidade de pancadas",
+    rainLikely: "Chuva provável",
+    thunderstorms: "Trovoadas",
+  },
   conditionsHeadingToday: "Condições atuais",
   conditionsHeadingFor: "Condições para",
   high: "Máxima",
@@ -201,6 +273,42 @@ const pt: Translations = {
     strong: "Forte",
     moderate: "Moderado",
     disagreement: "Divergência",
+  },
+  moon: {
+    cardHeading: "Lua",
+    tonightHeading: "Hoje à noite",
+    illuminated: "iluminada",
+    moonrise: "Nascer da lua",
+    moonset: "Pôr da lua",
+    sky: "Céu",
+    rain: "Chuva",
+    visibleLaterTonight: "Visível mais tarde hoje à noite",
+    belowHorizonTonight: "Lua abaixo do horizonte hoje à noite",
+    alwaysUpTonight: "Visível a noite toda",
+    alwaysDownTonight: "Não visível hoje à noite",
+    unknown: "O nascer e o pôr da lua não estão disponíveis no momento",
+    phaseNames: {
+      newMoon: "Lua Nova",
+      waxingCrescent: "Lua Crescente",
+      firstQuarter: "Quarto Crescente",
+      waxingGibbous: "Lua Crescente Gibosa",
+      fullMoon: "Lua Cheia",
+      waningGibbous: "Lua Minguante Gibosa",
+      lastQuarter: "Quarto Minguante",
+      waningCrescent: "Lua Minguante",
+    },
+    rainLevels: {
+      none: "Sem previsão de chuva",
+      low: "Baixa chance de chuva",
+      possible: "Chuva possível",
+      expected: "Chuva prevista",
+    },
+    skyLevels: {
+      clear: "Céu limpo",
+      mostlyClear: "Poucas nuvens",
+      partlyCloudy: "Parcialmente nublado",
+      cloudy: "Nublado",
+    },
   },
 };
 
