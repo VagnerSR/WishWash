@@ -1,6 +1,6 @@
 import { useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
-import { THEME } from "../lib/theme";
+import { useTheme } from "../theme/ThemeContext";
 
 interface HeroCarouselProps {
   slides: ReactNode[];
@@ -9,6 +9,7 @@ interface HeroCarouselProps {
 const DRAG_THRESHOLD_PX = 60;
 
 export function HeroCarousel({ slides }: HeroCarouselProps) {
+  const { THEME, isPixel, shadow } = useTheme();
   const [index, setIndex] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [dragging, setDragging] = useState(false);
@@ -79,17 +80,19 @@ export function HeroCarousel({ slides }: HeroCarouselProps) {
           }}
         >
           {slides.map((slide, i) => (
-            <div
-              key={i}
-              style={{ flex: "0 0 100%" }}
-              // Fixed, matching height for every slide so the weather hero and
-              // the Moon card always render at the same size. The arbitrary
-              // selectors normalize VerdictHero's own section/card wrapper
-              // (which we don't touch directly) to fill that height instead
-              // of leaving blank space when its content is shorter.
-              className="h-[440px] md:h-[280px] overflow-hidden rounded-3xl [&>section]:!mb-0 [&>section]:!h-full [&>section>div]:!h-full [&>section>div]:!justify-center"
-            >
-              {slide}
+            // The cell reserves gutter room on the right/bottom so each card's
+            // hard drop shadow isn't clipped by the track's overflow-hidden.
+            <div key={i} style={{ flex: "0 0 100%", padding: isPixel ? "0 10px 10px 0" : undefined }}>
+              <div
+                // Fixed, matching height for every slide so the weather hero and
+                // the Moon card always render at the same size. The arbitrary
+                // selectors normalize VerdictHero's own section/card wrapper
+                // (which we don't touch directly) to fill that height instead
+                // of leaving blank space when its content is shorter.
+                className={isPixel ? "h-[440px] md:h-[280px] [&>section]:!mb-0 [&>section]:!h-full [&>section>div]:!h-full [&>section>div]:!justify-center [&>section>div]:overflow-hidden" : "h-[440px] md:h-[280px] overflow-hidden rounded-3xl [&>section]:!mb-0 [&>section]:!h-full [&>section>div]:!h-full [&>section>div]:!justify-center"}
+              >
+                {slide}
+              </div>
             </div>
           ))}
         </div>
@@ -100,20 +103,25 @@ export function HeroCarousel({ slides }: HeroCarouselProps) {
           type="button"
           aria-label="Next card"
           onClick={() => setIndex((i) => clampIndex(i + 1))}
-          style={{ background: THEME.card, color: THEME.ink, borderColor: THEME.line }}
-          className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-9 h-9 rounded-full border opacity-60 hover:opacity-100 transition-opacity shadow-sm"
+          style={{
+            background: isPixel ? THEME.marigold : THEME.card,
+            color: THEME.ink,
+            borderColor: THEME.edge,
+            boxShadow: shadow(3),
+          }}
+          className={isPixel ? "px-btn hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 border-4" : "hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 items-center justify-center w-9 h-9 rounded-full border opacity-60 hover:opacity-100 transition-opacity shadow-sm"}
         >
           <ChevronRight size={18} />
         </button>
       )}
 
       {lastCount > 1 && (
-        <div className="flex justify-center gap-1.5 mt-3">
+        <div className={isPixel ? "flex justify-center gap-2 mt-3" : "flex justify-center gap-1.5 mt-3"}>
           {slides.map((_, i) => (
             <span
               key={i}
-              style={{ background: i === index ? THEME.denim : THEME.line }}
-              className="w-1.5 h-1.5 rounded-full transition-colors"
+              style={{ background: i === index ? THEME.denim : isPixel ? THEME.card : THEME.line, borderColor: THEME.edge }}
+              className={isPixel ? "w-3 h-3 border-2" : "w-1.5 h-1.5 rounded-full transition-colors"}
             />
           ))}
         </div>

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { Loader2 } from "lucide-react";
-import { THEME } from "./lib/theme";
+import { ThemeProvider, useTheme } from "./theme/ThemeContext";
 import { buildWashRecommendation } from "./lib/washVerdict";
 import { extractDaySlice } from "./lib/hourlySlice";
 import { usePlace } from "./hooks/usePlace";
@@ -23,14 +23,17 @@ import type { DayForecast, GeocodeResult, TempUnit } from "./types/weather";
 
 export default function App() {
   return (
-    <I18nProvider>
-      <AppContent />
-    </I18nProvider>
+    <ThemeProvider>
+      <I18nProvider>
+        <AppContent />
+      </I18nProvider>
+    </ThemeProvider>
   );
 }
 
 function AppContent() {
   const { t, localeTag } = useI18n();
+  const { THEME, isPixel, font } = useTheme();
   const [unit, setUnit] = useState<TempUnit>("c");
   const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -107,9 +110,24 @@ function AppContent() {
   const agreement = agreementFor(readings);
   const moon = buildMoonInfo(place, data);
 
+  const checker = "linear-gradient(45deg, rgba(27,36,64,0.05) 25%, transparent 25%, transparent 75%, rgba(27,36,64,0.05) 75%)";
+  const rootStyle: CSSProperties = isPixel
+    ? {
+        fontFamily: font.body,
+        fontSize: 17,
+        background: THEME.paper,
+        // Subtle 2-tone checker dither behind everything.
+        backgroundImage: `${checker}, ${checker}`,
+        backgroundSize: "16px 16px",
+        backgroundPosition: "0 0, 8px 8px",
+        color: THEME.ink,
+        minHeight: "100vh",
+      }
+    : { fontFamily: font.body, background: THEME.paper, color: THEME.ink, minHeight: "100vh" };
+
   return (
     <div
-      style={{ fontFamily: "'Inter', sans-serif", background: THEME.paper, color: THEME.ink, minHeight: "100vh" }}
+      style={rootStyle}
       className="w-full"
     >
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-8 md:py-12">
@@ -128,14 +146,21 @@ function AppContent() {
         {loading && (
           <div className="flex items-center gap-2 py-16 justify-center" style={{ color: THEME.inkSoft }}>
             <Loader2 size={18} className="animate-spin" />
-            <span className="text-sm">{t.loading}</span>
+            <span style={{ fontFamily: isPixel ? font.display : undefined }} className={isPixel ? "text-xs uppercase" : "text-sm"}>
+              {t.loading}
+            </span>
           </div>
         )}
 
         {error && !loading && (
           <div
-            style={{ background: THEME.card, borderColor: THEME.line, color: THEME.rust }}
-            className="border rounded-2xl px-5 py-4 text-sm mb-8"
+            style={{
+              background: THEME.card,
+              borderColor: isPixel ? THEME.rust : THEME.line,
+              color: THEME.rust,
+              boxShadow: isPixel ? `4px 4px 0 0 ${THEME.rust}` : undefined,
+            }}
+            className={isPixel ? "border-4 px-5 py-4 text-base mb-8" : "border rounded-2xl px-5 py-4 text-sm mb-8"}
           >
             {error}. {t.errorSuffix}
           </div>

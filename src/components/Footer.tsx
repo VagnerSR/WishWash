@@ -1,5 +1,5 @@
 import { Github, Linkedin, Globe } from "lucide-react";
-import { THEME } from "../lib/theme";
+import { useTheme } from "../theme/ThemeContext";
 import { useI18n } from "../i18n/I18nContext";
 
 const AUTHOR_NAME = "Vagner Rosnoski";
@@ -9,9 +9,10 @@ const PORTFOLIO_URL = "https://vagner-rosnoski.vercel.app/";
 
 export function Footer() {
   const { t } = useI18n();
+  const { THEME, isPixel } = useTheme();
 
   return (
-    <footer style={{ color: THEME.inkSoft }} className="text-xs mt-10 text-center">
+    <footer style={{ color: THEME.inkSoft }} className={isPixel ? "text-sm mt-12 text-center" : "text-xs mt-10 text-center"}>
       <p>{t.footer}</p>
       <p className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
         <span>

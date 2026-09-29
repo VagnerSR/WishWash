@@ -8,7 +8,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
-import { THEME } from "../lib/theme";
+import { useTheme } from "../theme/ThemeContext";
 import { fmtHour, cToF, tempUnitLabel } from "../lib/format";
 import { useI18n } from "../i18n/I18nContext";
 import type { HourlyWeather, TempUnit } from "../types/weather";
@@ -28,6 +28,7 @@ interface HourPoint {
 
 export function HourlyChart({ hourly, dayIndex, dayLabel, unit }: HourlyChartProps) {
   const { t, localeTag } = useI18n();
+  const { THEME, isPixel, shadow, font } = useTheme();
 
   const start = dayIndex * 24;
   const end = start + 24;
@@ -43,26 +44,26 @@ export function HourlyChart({ hourly, dayIndex, dayLabel, unit }: HourlyChartPro
 
   return (
     <section>
-      <p style={{ color: THEME.inkSoft }} className="text-sm mb-4">
+      <p style={{ color: THEME.inkSoft, fontFamily: isPixel ? font.display : undefined }} className={isPixel ? "text-xs uppercase mb-4" : "text-sm mb-4"}>
         {t.hourlyHeadingPrefix} {dayLabel} — {t.hourlyMetrics}
       </p>
       <div
-        style={{ background: THEME.card, borderColor: THEME.line }}
-        className="rounded-2xl border p-4 md:p-6"
+        style={{ background: THEME.card, borderColor: THEME.edge, boxShadow: shadow(4) }}
+        className={isPixel ? "border-4 p-4 md:p-6" : "rounded-2xl border p-4 md:p-6"}
       >
         <ResponsiveContainer width="100%" height={220}>
           <ComposedChart data={points} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-            <CartesianGrid stroke={THEME.line} vertical={false} />
+            <CartesianGrid stroke={THEME.line} strokeDasharray={isPixel ? "4 4" : undefined} vertical={false} />
             <XAxis
               dataKey="time"
-              tick={{ fontSize: 11, fill: THEME.inkSoft }}
-              axisLine={{ stroke: THEME.line }}
+              tick={{ fontSize: isPixel ? 13 : 11, fill: THEME.inkSoft, fontFamily: isPixel ? font.body : undefined }}
+              axisLine={{ stroke: THEME.edge, strokeWidth: isPixel ? 2 : 1 }}
               tickLine={false}
               interval={2}
             />
             <YAxis
               yAxisId="temp"
-              tick={{ fontSize: 11, fill: THEME.inkSoft }}
+              tick={{ fontSize: isPixel ? 13 : 11, fill: THEME.inkSoft, fontFamily: isPixel ? font.body : undefined }}
               axisLine={false}
               tickLine={false}
               width={40}
@@ -70,25 +71,29 @@ export function HourlyChart({ hourly, dayIndex, dayLabel, unit }: HourlyChartPro
             <YAxis yAxisId="rain" orientation="right" hide domain={[0, 100]} />
             <Tooltip
               contentStyle={{
-                background: THEME.paper,
-                border: `1px solid ${THEME.line}`,
-                borderRadius: 10,
-                fontSize: 12,
+                background: isPixel ? THEME.card : THEME.paper,
+                border: isPixel ? `3px solid ${THEME.edge}` : `1px solid ${THEME.line}`,
+                borderRadius: isPixel ? 0 : 10,
+                boxShadow: shadow(3),
+                fontSize: isPixel ? 14 : 12,
+                fontFamily: isPixel ? font.body : undefined,
               }}
             />
             <Bar
               yAxisId="rain"
               dataKey="rain"
               fill={THEME.denim}
-              opacity={0.18}
-              radius={[3, 3, 0, 0]}
+              opacity={isPixel ? 0.4 : 0.18}
+              radius={isPixel ? 0 : ([3, 3, 0, 0] as [number, number, number, number])}
               name={t.rainLegend}
             />
             <Line
               yAxisId="temp"
               dataKey="temp"
+              type={isPixel ? "stepAfter" : "linear"}
               stroke={THEME.rust}
-              strokeWidth={2}
+              strokeWidth={isPixel ? 3 : 2}
+              strokeLinecap={isPixel ? "square" : undefined}
               dot={false}
               name={`${t.tempLegend} ${tempUnitLabel(unit)}`}
             />

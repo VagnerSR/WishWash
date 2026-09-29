@@ -8,7 +8,7 @@ import {
   Sunrise,
   Sunset,
 } from "lucide-react";
-import { THEME } from "../lib/theme";
+import { useTheme } from "../theme/ThemeContext";
 import { StatCard } from "./StatCard";
 import { formatTemp, formatWind, tempUnitLabel, windUnitLabel, fmtClock } from "../lib/format";
 import { useI18n } from "../i18n/I18nContext";
@@ -24,14 +24,15 @@ interface ConditionsGridProps {
 
 export function ConditionsGrid({ day, current, isToday, dayLabel, unit }: ConditionsGridProps) {
   const { t, localeTag } = useI18n();
+  const { THEME, isPixel, font } = useTheme();
   const heading = isToday ? t.conditionsHeadingToday : `${t.conditionsHeadingFor} ${dayLabel}`;
 
   return (
     <section className="mb-10 md:mb-14">
-      <p style={{ color: THEME.inkSoft }} className="text-sm mb-4">
+      <p style={{ color: THEME.inkSoft, fontFamily: isPixel ? font.display : undefined }} className={isPixel ? "text-xs uppercase mb-4" : "text-sm mb-4"}>
         {heading}
       </p>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+      <div className={isPixel ? "grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5" : "grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4"}>
         {isToday && current ? (
           <>
             <StatCard

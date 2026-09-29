@@ -46,6 +46,9 @@ export interface Translations {
   footer: string;
   footerCredit: string;
   unitToggle: string;
+  themeToEightBit: string;
+  themeToClassic: string;
+  themeToggleLabel: string;
   confidence: { strong: string; moderate: string; disagreement: string };
   moon: {
     cardHeading: string;
@@ -146,6 +149,9 @@ const en: Translations = {
   footer: "Data from Open-Meteo. Updated on load.",
   footerCredit: "Developed by",
   unitToggle: "°C / °F",
+  themeToEightBit: "8-bit",
+  themeToClassic: "Classic",
+  themeToggleLabel: "Switch between the classic and 8-bit look",
   confidence: {
     strong: "Strong",
     moderate: "Moderate",
@@ -269,6 +275,9 @@ const pt: Translations = {
   footer: "Dados do Open-Meteo. Atualizado ao carregar.",
   footerCredit: "Desenvolvido por",
   unitToggle: "°C / °F",
+  themeToEightBit: "8-bit",
+  themeToClassic: "Clássico",
+  themeToggleLabel: "Alternar entre o visual clássico e o 8-bit",
   confidence: {
     strong: "Forte",
     moderate: "Moderado",

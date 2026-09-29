@@ -3,3 +3,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ---- 8-bit theme only (html[data-theme="pixel"]) ---- */
+
+[data-theme="pixel"] body {
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+}
+
+[data-theme="pixel"] img {
+  image-rendering: pixelated;
+}
+
+/* Chunky buttons that "press" into their hard shadow. */
+[data-theme="pixel"] .px-btn:hover {
+  filter: brightness(1.06);
+}
+[data-theme="pixel"] .px-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none !important;
+}
+
+/* Blocky, stepped focus ring. */
+[data-theme="pixel"] input:focus-visible,
+[data-theme="pixel"] button:focus-visible,
+[data-theme="pixel"] a:focus-visible {
+  outline: 3px dashed #2F7FD0;
+  outline-offset: 2px;
+}

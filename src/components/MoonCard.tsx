@@ -1,8 +1,8 @@
 import { Cloud, CloudRain, Moon, Sunrise, Sunset } from "lucide-react";
-import { THEME } from "../lib/theme";
+import { useTheme } from "../theme/ThemeContext";
 import { fmtClock } from "../lib/format";
 import { useI18n } from "../i18n/I18nContext";
-import { MoonPhaseIcon } from "./MoonPhaseIcon";
+import { MoonPhaseGif } from "./MoonPhaseGif";
 import type { MoonInfo } from "../types/weather";
 
 interface MoonCardProps {
@@ -11,12 +11,13 @@ interface MoonCardProps {
 
 export function MoonCard({ moon }: MoonCardProps) {
   const { t, localeTag } = useI18n();
+  const { THEME, isPixel, shadow, font, headingWeight } = useTheme();
 
   if (!moon) {
     return (
       <div
-        style={{ background: THEME.stormDeep, color: "#F3F4F1" }}
-        className="rounded-3xl px-6 md:px-10 py-7 md:py-9 h-full flex flex-col items-center justify-center text-center gap-2"
+        style={{ background: THEME.stormDeep, color: "#F3F4F1", borderColor: THEME.edge, boxShadow: shadow(6) }}
+        className={isPixel ? "border-4 px-6 md:px-10 py-7 md:py-9 h-full flex flex-col items-center justify-center text-center gap-2" : "rounded-3xl px-6 md:px-10 py-7 md:py-9 h-full flex flex-col items-center justify-center text-center gap-2"}
       >
         <Moon size={40} strokeWidth={1.4} opacity={0.7} />
         <p className="text-sm opacity-80">{t.moon.unknown}</p>
@@ -45,8 +46,8 @@ export function MoonCard({ moon }: MoonCardProps) {
 
   return (
     <div
-      style={{ background: THEME.stormDeep, color: "#F3F4F1" }}
-      className="relative overflow-hidden rounded-3xl px-6 md:px-10 py-6 md:py-8 h-full flex flex-col md:flex-row md:items-center md:justify-center md:gap-10 justify-center gap-4"
+      style={{ background: THEME.stormDeep, color: "#F3F4F1", borderColor: THEME.edge, boxShadow: shadow(6) }}
+      className={isPixel ? "relative overflow-hidden border-4 px-6 md:px-10 py-6 md:py-8 h-full flex flex-col md:flex-row md:items-center md:justify-center md:gap-10 justify-center gap-4" : "relative overflow-hidden rounded-3xl px-6 md:px-10 py-6 md:py-8 h-full flex flex-col md:flex-row md:items-center md:justify-center md:gap-10 justify-center gap-4"}
     >
       {isFull && (
         <div
@@ -57,20 +58,20 @@ export function MoonCard({ moon }: MoonCardProps) {
       )}
 
       <div className="relative flex flex-row md:flex-col items-center gap-4 md:gap-2 md:text-center">
-        <MoonPhaseIcon phase={moon.phaseFraction} size={72} />
+        <MoonPhaseGif phaseName={moon.phaseName} size={96} />
         <div className="flex flex-col md:items-center">
-          <p className="text-[11px] uppercase tracking-wide opacity-60">{t.moon.cardHeading}</p>
-          <h2 style={{ fontFamily: "'Fraunces', serif", fontWeight: 600 }} className="text-xl leading-tight">
+          <p style={{ fontFamily: isPixel ? font.display : undefined }} className={isPixel ? "text-[11px] uppercase tracking-wide opacity-70" : "text-[11px] uppercase tracking-wide opacity-60"}>{t.moon.cardHeading}</p>
+          <h2 style={{ fontFamily: font.display, fontWeight: headingWeight }} className={isPixel ? "text-lg leading-tight uppercase mt-1" : "text-xl leading-tight"}>
             {phaseLabel}
           </h2>
-          <p className="text-sm opacity-80">
+          <p className={isPixel ? "text-base opacity-80 mt-1" : "text-sm opacity-80"}>
             {moon.illuminationPercent}% {t.moon.illuminated}
           </p>
         </div>
       </div>
 
-      <div className="relative flex flex-col gap-1.5 text-sm md:min-w-[210px]">
-        <p className="text-[11px] uppercase tracking-wide opacity-60">{t.moon.tonightHeading}</p>
+      <div className={isPixel ? "relative flex flex-col gap-1.5 text-base md:min-w-[230px]" : "relative flex flex-col gap-1.5 text-sm md:min-w-[210px]"}>
+        <p style={{ fontFamily: isPixel ? font.display : undefined }} className={isPixel ? "text-[11px] uppercase tracking-wide opacity-70" : "text-[11px] uppercase tracking-wide opacity-60"}>{t.moon.tonightHeading}</p>
 
         {showMoonrise && (
           <span className="flex items-center gap-2">
